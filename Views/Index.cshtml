@@ -1,0 +1,60 @@
+﻿@model IEnumerable<To_Do_List_Application.Models.ToDoTask>
+
+@{
+    ViewData["Title"] = "Task List";
+}
+
+<h1>Task List</h1>
+
+<!-- Search Bar and Category Filter -->
+<form method="get">
+    <div class="form-inline">
+        <!-- Search Input -->
+        <input type="text" name="search" placeholder="Search tasks..." 
+               class="form-control" 
+               value="@Context.Request.Query["search"]" />
+
+        <!-- Category Dropdown -->
+        <select name="category" class="form-control">
+            <option value="">-- Select Category --</option>
+            @foreach (var category in new[] { "Work", "Personal", "Study" })
+            {
+                var isSelected = Context.Request.Query["category"] == category ? "selected=\"selected\"" : "";
+                @: <option value="@category" @Html.Raw(isSelected)>@category</option>
+            }
+        </select>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary">Filter</button>
+    </div>
+</form>
+
+
+<!-- Task List -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr>
+                <td>@task.Title</td>
+                <td>@task.Category</td>
+                <td>@(task.DueDate.HasValue ? task.DueDate.Value.ToShortDateString() : "N/A")</td>
+                <td>@(task.IsCompleted ? "Completed" : "Pending")</td>
+                <td>
+                    <a href="@Url.Action("Details", new { id = task.TaskId })" class="btn btn-info">Details</a>
+                    <a href="@Url.Action("Edit", new { id = task.TaskId })" class="btn btn-warning">Edit</a>
+                    <a href="@Url.Action("Delete", new { id = task.TaskId })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,32 @@
+﻿@model IEnumerable<To_Do_List_Application.Models.ToDoTask>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Title)</th>
+            <th>@Html.DisplayNameFor(model => model.Description)</th>
+            <th>@Html.DisplayNameFor(model => model.Category)</th>
+            <th>@Html.DisplayNameFor(model => model.DueDate)</th>
+            <th>@Html.DisplayNameFor(model => model.IsCompleted)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr>
+                <td>@task.Title</td>
+                <td>@task.Category</td>
+                <td>@task.Description</td>
+                <td>@(task.DueDate?.ToShortDateString() ?? "N/A")</td>
+                <td>
+                    <input type="checkbox" class="toggle-complete" data-id="@task.TaskId" @(task.IsCompleted ? "checked" : "") />
+                </td>
+                <td>
+                    <a href="@Url.Action("Edit", new { id = task.TaskId })" class="btn btn-warning">Edit</a>
+                    <a href="@Url.Action("Delete", new { id = task.TaskId })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

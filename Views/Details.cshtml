@@ -1,0 +1,21 @@
+﻿@model To_Do_List_Application.Models.ToDoTask
+
+@{
+    ViewData["Title"] = "Task Details";
+}
+
+<h1>Task Details</h1>
+
+<div>
+    <h3>@Model.Title</h3>
+    <p><strong>Category:</strong> @Model.Category</p>
+    <p><strong>Description:</strong> @Model.Description</p>
+    <p><strong>Due Date:</strong> @(Model.DueDate.HasValue ? Model.DueDate.Value.ToString("yyyy-MM-dd") : "N/A")</p>
+    <p><strong>Status:</strong> @(Model.IsCompleted ? "Completed" : "Pending")</p>
+</div>
+
+<div>
+    <a href="@Url.Action("Edit", new { id = Model.TaskId })" class="btn btn-warning">Edit</a>
+    <a href="@Url.Action("Delete", new { id = Model.TaskId })" class="btn btn-danger">Delete</a>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Back to List</a>
+</div>

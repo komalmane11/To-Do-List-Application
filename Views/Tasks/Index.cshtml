@@ -1,0 +1,41 @@
+﻿@model IEnumerable<To_Do_List_Application.Models.ToDoTask>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Task List</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<!-- Display the selected category and sort order from the session -->
+<p>Selected Category: @ViewBag.SelectedCategory</p>
+<p>Sort Order: @ViewBag.SortOrder</p>
+
+<!-- Link to clear session data -->
+<a href="@Url.Action("ClearSession")">Clear Session Data</a>
+
+<!-- Wrap the task list table in a div container for AJAX updates -->
+<div id="task-list">
+    @Html.Partial("_TaskListPartial", Model)  <!-- Initial Rendering of the Task List -->
+</div>
+
+<!-- Include jQuery and AJAX Script -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).on('change', '.toggle-complete', function () {
+        var taskId = $(this).data('id');  // Get the task ID from the checkbox
+        var isCompleted = $(this).prop('checked');  // Check if the checkbox is checked
+        $.ajax({
+            url: '/Tasks/ToggleComplete',  // The URL for the action method
+            type: 'POST',
+            data: { taskId: taskId, isCompleted: isCompleted },  // Send task ID and completion status
+            success: function (response) {
+                // Update the task list with the partial view
+                $('#task-list').html(response);  // This will replace the content inside the div
+            }
+        });
+    });
+</script>
